@@ -1,4 +1,4 @@
-#1
+#1 Merge
 setwd("C:\\Users\\TOPES5\\Desktop\\coursera\\UCI HAR Dataset")
 library(plyr)
 library(data.table)
@@ -12,23 +12,21 @@ yTest<-read.table('./test/y_test.txt',header=FALSE)
 xDataSet <- rbind(xTrain, xTest)
 yDataSet <- rbind(yTrain, yTest)
 subjectDataSet <- rbind(subjectTrain, subjectTest)
-#2
+#2 Extract
 xDataSet_mean_std <- xDataSet[, grep("-(mean|std)\\(\\)", read.table("features.txt")[, 2])]
 names(xDataSet_mean_std) <- read.table("features.txt")[grep("-(mean|std)\\(\\)", read.table("features.txt")[, 2]), 2] 
 View(xDataSet_mean_std)
 dim(xDataSet_mean_std)
-#3
+#3 Name
 yDataSet[, 1] <- read.table("activity_labels.txt")[yDataSet[, 1], 2]
 names(yDataSet) <- "Activity"
 View(yDataSet) #standing
-#4
+#4 label
 names(subjectDataSet) <- "Subject"
 summary(subjectDataSet)
-# Organizing and combining all data sets into single one.
-
 singleDataSet <- cbind(xDataSet_mean_std, yDataSet, subjectDataSet)
 singleDataSet 
-# Defining descriptive names for all variables.
+# names for all variables.
 
 names(singleDataSet) <- make.names(names(singleDataSet))
 names(singleDataSet) <- gsub('Acc',"Acceleration",names(singleDataSet))
@@ -41,9 +39,8 @@ names(singleDataSet) <- gsub('\\.mean',".Mean",names(singleDataSet))
 names(singleDataSet) <- gsub('\\.std',".StandardDeviation",names(singleDataSet))
 names(singleDataSet) <- gsub('Freq\\.',"Frequency.",names(singleDataSet))
 names(singleDataSet) <- gsub('Freq$',"Frequency",names(singleDataSet))
-View(singleDataSet)
 
-#5
+#5 Create independent dataset
 Data2<-aggregate(. ~Subject + Activity, singleDataSet, mean)
 Data2<-Data2[order(Data2$Subject,Data2$Activity),]
 write.table(Data2, file = "tidydata.txt",row.name=FALSE)
