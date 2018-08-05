@@ -31,3 +31,5 @@ cacheSolve <- function(x, ...) {
   x$setInverse(inv)
   inv      
   }
+
+git push -f origin <branch>
