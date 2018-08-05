@@ -32,4 +32,3 @@ cacheSolve <- function(x, ...) {
   inv      
   }
 
-git push -f origin <branch>
